@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config();
+console.log("IMAGEKIT_PUBLIC_KEY:", process.env.IMAGEKIT_PUBLIC_KEY);
 import express from "express";
 import connectDB from "./lib/connectDB.js";
 import userRouter from "./routes/user.route.js";
@@ -58,7 +61,10 @@ app.use((error, req, res, next) => {
   });
 });
 
+const PORT = process.env.PORT || 3000;
+
 app.listen(3000, () => {
   connectDB();
   console.log("Server is running!");
 });
+

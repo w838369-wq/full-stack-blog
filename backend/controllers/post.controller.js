@@ -176,13 +176,32 @@ export const featurePost = async (req, res) => {
   res.status(200).json(updatedPost);
 };
 
-const imagekit = new ImageKit({
-  urlEndpoint: process.env.IK_URL_ENDPOINT,
-  publicKey: process.env.IK_PUBLIC_KEY,
-  privateKey: process.env.IK_PRIVATE_KEY,
-});
+// Lazy ImageKit initializer with env validation to avoid crashing at module load
+const getImageKit = () => {
+  const publicKey = process.env.IK_PUBLIC_KEY || process.env.IMAGEKIT_PUBLIC_KEY;
+  const urlEndpoint = process.env.IK_URL_ENDPOINT;
+  const privateKey = process.env.IK_PRIVATE_KEY;
+
+  if (!publicKey || !privateKey || !urlEndpoint) {
+    throw new Error(
+      `Missing ImageKit env vars. IK_PUBLIC_KEY: ${!!publicKey}, IK_PRIVATE_KEY: ${!!privateKey}, IK_URL_ENDPOINT: ${!!urlEndpoint}`
+    );
+  }
+
+  return new ImageKit({
+    urlEndpoint,
+    publicKey,
+    privateKey,
+  });
+};
 
 export const uploadAuth = async (req, res) => {
-  const result = imagekit.getAuthenticationParameters();
-  res.send(result);
+  try {
+    const imagekit = getImageKit();
+    const result = imagekit.getAuthenticationParameters();
+    return res.status(200).json(result);
+  } catch (err) {
+    console.error("uploadAuth error:", err.message);
+    return res.status(500).json({ message: err.message });
+  }
 };
