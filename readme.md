@@ -224,13 +224,3 @@ Index posts by `{ createdAt }` and `{ visit }` for sorting and paging.
 - If front or backend env vars change, restart the corresponding dev server.
 - To debug a blank page, check the browser console and Vite terminal for runtime errors (missing `VITE_CLERK_PUBLISHABLE_KEY` will throw in `src/main.jsx`).
 
-## Optional improvements
-
-- Add `client/.env.example` and `backend/.env.example` (client one is already present)
-- Add a root `dev` script to run frontend + backend concurrently (via `concurrently`)
-- Add tests and CI for backend routes
-
----
-
-If you'd like, I can add `backend/.env.example` and a root `dev` script now. Tell me which (npm-based concurrently script or a `docker-compose.yml`) you prefer.
-
